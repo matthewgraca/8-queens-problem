@@ -2,12 +2,54 @@ package com.mgraca.app;
 
 public class EightQueensProblem 
 {
-  // if all queens are placed, return true
-  // place queen in first available column
-  // mark places rendered invalid by queens placement
-  // move ot next row
-  public static boolean solve(){
-    return true;
+  /**
+   * Solves the eight queens problem
+   * @return a 2d array containing a solution
+   */
+  public static int[][] solve(){
+    // if all queens are placed, return true
+    // place queen in first available column
+    // mark places rendered invalid by queens placement
+    // move ot next row
+    int[][] board = new int[8][8];
+    solveRecursively(board, 0);
+    return board;
+  }
+
+  /**
+   * Recursive function that uses backtracking to solve the 8 queens problem
+   * @param board the board containing the queens (0 open, 1 queen)
+   * @param col   the column the function will attempt to place the queen
+   * @return true if the queen was placed, false if not
+   */
+  private static boolean solveRecursively(int[][] board, int col){
+    int n = board.length;
+    // base case: all queens have been placed
+    if (col == n){
+      return true;
+    }
+
+    // check the row and place the queen in the first available column
+    for (int row = 0; row < n; row++){
+      // place queen. if collision occurs, move queen to next column 
+      board[row][col] = 1;
+      // if collision occurs, remove and move to next col
+      if (collisionFound(board)){
+        board[row][col] = 0;
+      }
+      else{
+        // if no collision, continue
+        if (solveRecursively(board, col+1)){
+          return true;
+        }
+        else{
+          // if solution not found, backtrack
+          board[row][col] = 0;
+        }
+      }
+    }
+    // could not find a queen to place on this row
+    return false;
   }
 
   /**
@@ -30,6 +72,24 @@ public class EightQueensProblem
       }
     }
     return false;
+  }
+
+  /**
+   * Counts the number of queens on the board
+   * @param board the board containing the queens (1 = queen)
+   * @return the number of queens on the board
+   */
+  public static int numOfQueens(int[][] board){
+    int sum = 0;
+    int n = board.length;
+    for (int row = 0; row < n; row++){
+      for (int col = 0; col < n; col++){
+        if (board[row][col] == 1){
+          sum++;
+        }
+      }
+    }
+    return sum;
   }
 
   /**
@@ -78,28 +138,28 @@ public class EightQueensProblem
     int i, j;
 
     // check northeast diagonal
-    for (i = row-1, j = col+1; i - 1 >= 0 && j + 1 < n; i--, j++){
+    for (i = row-1, j = col+1; i >= 0 && j < n; i--, j++){
       if (board[i][j] == 1){
         return true;
       }
     }
 
     // check northwest diagonal
-    for (i = row-1, j = col-1; i - 1 >= 0 && j - 1 >= 0; i--, j--){
+    for (i = row-1, j = col-1; i >= 0 && j >= 0; i--, j--){
       if (board[i][j] == 1){
         return true;
       }
     }
 
     // check southeast diagonal
-    for (i = row+1, j = col+1; i + 1 < n && j + 1 < n; i++, j++){
+    for (i = row+1, j = col+1; i < n && j < n; i++, j++){
       if (board[i][j] == 1){
         return true;
       }
     }
 
     // check southwest diagonal
-    for (i = row+1, j = col-1; i + 1 < n && j - 1 >= 0; i++, j--){
+    for (i = row+1, j = col-1; i < n && j >= 0; i++, j--){
       if (board[i][j] == 1){
         return true;
       }
