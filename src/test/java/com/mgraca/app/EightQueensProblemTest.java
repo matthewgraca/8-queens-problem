@@ -9,12 +9,6 @@ public class EightQueensProblemTest
   @Test
   public void testSolution(){
     int[][] board = EightQueensProblem.solve();
-    for (int i = 0; i < board.length; i++){
-      for (int j = 0; j < board.length; j++){
-        System.out.print(board[i][j] + " ");
-      }
-      System.out.println();
-    }
     assertTrue( !EightQueensProblem.collisionFound(board) && 
                 EightQueensProblem.numOfQueens(board) == 8);
   }
